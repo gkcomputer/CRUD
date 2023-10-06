@@ -1,0 +1,37 @@
+.text {
+  font-size: large;
+  font-weight: 900;
+  margin-left: 90px;
+}
+.text1 {
+  font-size: xx-large;
+  font-weight: 900;
+}
+.row1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 15px 10px 90px;
+}
+.row1_btns {
+  display: flex;
+  gap: 20px;
+}
+.user_inputs {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px 10px 10px 90px;
+  justify-content: flex-start;
+  gap: 40px;
+}
+.input_feild {
+  width: 350px;
+  height: 30px;
+}
+.row3 {
+  margin: 50px 0px 50px 0px;
+}
+
+.formControl {
+  width: 350px;
+}

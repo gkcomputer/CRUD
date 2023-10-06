@@ -1,0 +1,35 @@
+.scanner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.maindiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  padding-bottom: 30px;
+  border-radius: 15px;
+  position: absolute;
+  /* z-index: -1; */
+  margin-right: 500px;
+  background-color: rgb(255, 254, 253);
+  margin-left: 1187px;
+  margin-top: 70px;
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  border: 1px solid gray;
+}
+.qrimg {
+  width: 80px;
+}
+.logintext {
+  font-size: large;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+.inputFeilds {
+  margin-top: 20px;
+}
