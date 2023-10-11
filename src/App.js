@@ -1,6 +1,5 @@
 import React from "react";
-import { SearchPage } from "./components/pages/searchPage/SearchPage";
-import { UpdateUser } from "./components/pages/userUpdatePage/UpdateUser";
+import SearchPage from "./components/pages/searchPage/SearchPage";
 import { BodyContent } from "./components/pages/homePage/BodyContent";
 
 function App() {
@@ -8,7 +7,6 @@ function App() {
     <div>
       {/* <BodyContent /> */}
       <SearchPage />
-      {/* <UpdateUser /> */}
     </div>
   );
 }

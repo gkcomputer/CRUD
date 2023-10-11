@@ -3,8 +3,8 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import { Button, IconButton } from "@mui/material";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import { Button } from "@mui/material";
+import UpdateIcon from "@mui/icons-material/Update";
 import { UpdateUser } from "./UpdateUser";
 
 const style = {
@@ -12,30 +12,35 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 850,
-  height: 440,
+  width: 740,
+  height: 450,
   bgcolor: "background.paper",
   border: "0px solid #000",
-  boxShadow: 24,
+  boxShadow: 20,
   p: 4,
   borderRadius: "15px",
 };
 
-export default function TransitionsModal() {
+export default function UpdateUserModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const close = () => {
+    setOpen(!open);
+  };
+
   return (
     <div>
-      <IconButton
+      <Button
         onClick={handleOpen}
         className="iconbtn"
-        sx={{ borderRadius: "0px" }}
+        sx={{ borderRadius: "5px" }}
+        variant="contained"
+        disabled
       >
-        Add
-        <PersonAddAltIcon />
-      </IconButton>
+        Update <UpdateIcon fontSize="x-small" sx={{ padding: "5px" }} />
+      </Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -51,7 +56,7 @@ export default function TransitionsModal() {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <UpdateUser />
+            <UpdateUser close={close} />
           </Box>
         </Fade>
       </Modal>

@@ -1,7 +1,7 @@
-export const searchApi = (event) => {
+export const nameSearch = (event) => {
   return (dispatch) => {
     dispatch({
-      type: "SEARCH_API",
+      type: "NAME_SEARCH",
       payload: event,
     });
   };
@@ -16,28 +16,19 @@ export const emailSearch = (event) => {
   };
 };
 
-export const printerSearch = (event) => {
+export const cardSearch = (event) => {
   return (dispatch) => {
     dispatch({
-      type: "PRINTER_SEARCH",
+      type: "CARD_SEARCH",
       payload: event,
     });
   };
 };
 
-export const updateUser = (item) => {
+export const searchResult = (item) => {
   return (dispatch) => {
     dispatch({
-      type: "UPDATEUSER",
-      payload: item,
-    });
-  };
-};
-
-export const updateUserDetails = (item) => {
-  return (dispatch) => {
-    dispatch({
-      type: "UPDATEUSERDETAILS",
+      type: "SEARCH_RESULT",
       payload: item,
     });
   };

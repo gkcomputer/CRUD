@@ -1,130 +1,139 @@
-import "./SearchPage.css";
-import TextField from "@mui/material/TextField";
-import { Button, IconButton } from "@mui/material";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import mockdata from "../../../services/mastekData.json";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import HistoryIcon from "@mui/icons-material/History";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { fetchApi } from "../../store/actions/fetchApi.action";
-import { searchApi, updateUser } from "../../store/actions/search.action";
-import { emailSearch } from "../../store/actions/search.action";
-import { printerSearch } from "../../store/actions/search.action";
-import TransitionsModal from "../userUpdatePage/UpdateUserModal";
+import React from "react";
+import logo from "../../../assests/logo.jpg";
+import { Button, TextField } from "@mui/material";
 import DataGridTable from "../../datagrid/DataGridTable";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  cardSearch,
+  emailSearch,
+  nameSearch,
+} from "../../store/actions/search.action";
+import { fetchApi, filteredData } from "../../store/actions/fetchApi.action";
+import TransitionsModal from "../AddUserModal/AddUserModal";
+import UpdateUserModal from "../../UpdateUser/UpdateUserModal";
 
-export const SearchPage = () => {
-  const tableHeader = [
-    "Mobile Username",
-    "Email",
-    "Fusion Username",
-    "Printer",
-    "From Date",
-    "To Date",
-    "Details",
-    "History",
-  ];
-
+function SearchPage() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchApi(data));
-  }, []);
-
   const data = useSelector((state) => state.apiReducer.ApiData);
-  const mobileuser = useSelector((state) => state.serarchData.mobileUser);
-  const email = useSelector((state) => state.serarchData.email);
-  const printer = useSelector((state) => state.serarchData.printer);
+  const nameInput = useSelector((state) => state.serarchData.fullname);
+  const emailInput = useSelector((state) => state.serarchData.email);
+  const cardInput = useSelector((state) => state.serarchData.card);
 
-  const searchResult = data.filter((item) =>
-    item.username.toLowerCase().includes(mobileuser)
-  );
-
-  const emailSearch = searchResult.filter((item) =>
-    item.email.toLowerCase().includes(email)
-  );
-
-  // const printerSearch = emailSearch.filter((item) =>
-  //   item.username.toLowerCase().includes(printer)
-  // );
-
-  const userCount = searchResult.length;
-
-  const changeHandler = (event, name) => {
-    if (name === "mobileuser") {
-      dispatch(searchApi(event.target.value.toLowerCase()));
+  const handleSerachClick = () => {
+    if (nameInput === "" && emailInput === "" && cardInput === "") {
+      dispatch(fetchApi(data));
+      return;
     }
-    if (name === "email") {
-      dispatch(emailSearch(event.target.value.toLowerCase()));
-    }
-    if (name === "printer") {
-      dispatch(printerSearch(event.target.value.toLowerCase()));
-    }
+
+    const nameFilter = data.filter((item) =>
+      item.fullName.toLowerCase().includes(nameInput.toLowerCase())
+    );
+    const emailFilter = nameFilter.filter((item) =>
+      item.email.toLowerCase().includes(emailInput.toLowerCase())
+    );
+    const cardFilter = emailFilter.filter((item) =>
+      item.card.includes(cardInput)
+    );
+    dispatch(filteredData(cardFilter));
+  };
+
+  const handleResetClick = () => {
+    dispatch(fetchApi(data));
+    dispatch(nameSearch(""));
+    dispatch(emailSearch(""));
+    dispatch(cardSearch(""));
   };
 
   return (
-    <div className="search_container">
-      <div className="searchtitle_div">
-        <p className="searchTitle">CRUD PROJECT</p>
-      </div>
-      <div className="searchInputs">
-        <TextField
-          className="textfeild"
-          id="outlined-basic"
-          label="Mobile Username"
-          variant="outlined"
-          onChange={(event, name = "mobileuser") => {
-            changeHandler(event, name);
-          }}
-        />
-        <TextField
-          className="textfeild"
-          id="outlined-basic"
-          label="Fusion Username"
-          variant="outlined"
-          onChange={(event, name = "email") => {
-            changeHandler(event, name);
-          }}
-        />
-        <TextField
-          className="textfeild"
-          id="outlined-basic"
-          label="Printer"
-          variant="outlined"
-          onChange={(event, name = "printer") => {
-            changeHandler(event, name);
-          }}
-        />
-        <Button variant="contained" color="primary">
-          Search
-        </Button>
-        <Button variant="contained" color="primary">
-          Reset
-        </Button>
-      </div>
-      <div className="tableHeadings">
+    <div style={{ width: "100%", height: "100%" }}>
+      <div
+        style={{
+          padding: "10px 30px 10px 30px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+        }}
+      >
         <div>
-          <p className="userText">{`All Users: ${userCount} `}</p>
+          <img
+            src={logo}
+            alt="logo"
+            width={150}
+            style={{ borderRadius: "5px" }}
+          />
         </div>
-        <div className="iconbtn_div">
-          <IconButton className="iconbtn" sx={{ borderRadius: "0px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              gap: "30px",
+            }}
+          >
+            <TextField
+              label="Full Name"
+              id="outlined-size-small"
+              size="small"
+              value={nameInput}
+              onChange={(e) => {
+                dispatch(nameSearch(e.target.value));
+              }}
+            />
+            <TextField
+              label="Email"
+              id="outlined-size-small"
+              size="small"
+              value={emailInput}
+              onChange={(e) => {
+                dispatch(emailSearch(e.target.value));
+              }}
+            />
+            <TextField
+              label="Card"
+              id="outlined-size-small"
+              size="small"
+              value={cardInput}
+              onChange={(e) => {
+                dispatch(cardSearch(e.target.value));
+              }}
+            />
+            <Button variant="contained" onClick={handleSerachClick}>
+              Search
+            </Button>
+            <Button variant="contained" onClick={handleResetClick}>
+              Reset
+            </Button>
+
             <TransitionsModal />
-          </IconButton>
-          <IconButton className="iconbtn" sx={{ borderRadius: "0px" }}>
-            Update
-          </IconButton>
-          <IconButton className="iconbtn" sx={{ borderRadius: "0px" }}>
-            Export <FileUploadIcon />
-          </IconButton>
+
+            <UpdateUserModal />
+
+            <Button variant="contained">Export</Button>
+          </div>
+          {/* <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: "30px",
+              // borderLeft: "1px solid #c7b9b9",
+              // paddingLeft: "10px",
+            }}
+          ></div> */}
+        </div>
+        <div>
+          <DataGridTable />
         </div>
       </div>
-      <DataGridTable />
     </div>
   );
-};
+}
+
+export default SearchPage;

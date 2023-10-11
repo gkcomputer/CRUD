@@ -1,38 +1,28 @@
 const initialState = {
-  mobileUser: "",
+  fullname: "",
   email: "",
-  printer: "",
+  card: "",
   selectedRow: {},
-  updateUserDetails: {},
 };
 
 export const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SEARCH_API":
+    case "NAME_SEARCH":
       return {
         ...state,
-        mobileUser: action.payload,
+        fullname: action.payload,
       };
     case "EMAIL_SEARCH":
       return {
         ...state,
         email: action.payload,
       };
-    case "PRINTER_SEARCH":
+    case "CARD_SEARCH":
       return {
         ...state,
-        printer: action.payload,
+        card: action.payload,
       };
-    case "UPDATEUSER":
-      return {
-        ...state,
-        selectedRow: action.payload,
-      };
-    case "UPDATEUSERDETAILS":
-      return {
-        ...state,
-        updateUserDetails: action.payload,
-      };
+
     default:
       return state;
   }

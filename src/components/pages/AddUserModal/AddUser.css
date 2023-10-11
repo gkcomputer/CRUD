@@ -1,0 +1,30 @@
+.text {
+  font-size: larger;
+  font-weight: 900;
+  margin-left: 90px;
+}
+.text1 {
+  font-size: large;
+  font-weight: 900;
+}
+.row1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+.row1_btns {
+  display: flex;
+  gap: 20px;
+}
+.user_inputs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 40px;
+  margin-top: 30px;
+}
+.input_feild {
+  width: 350px;
+  height: 30px;
+}

@@ -1,68 +1,170 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchApi,
+  selectAll,
+  selectedRow,
+} from "../store/actions/fetchApi.action";
+import { Box, Checkbox, Pagination, TablePagination } from "@mui/material";
+import CircleIcon from "@mui/icons-material/Circle";
 
-const columns = [
-  { field: "id", headerName: "ID", width: 90 },
-  {
-    field: "firstName",
-    headerName: "First name",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "lastName",
-    headerName: "Last name",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 110,
-    editable: true,
-  },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  },
-];
+export default function BasicTable() {
+  const [page, pageChange] = React.useState(0);
+  const [rowsPerPage, rowsPerPageChange] = React.useState(5);
+  const data = useSelector((state) => state.apiReducer.ApiData);
+  const dispatch = useDispatch();
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
+  const columns = [
+    {
+      column: "Select",
+      type: "checkbox",
+      width: "10px",
+    },
+    { column: "Name", width: "10px" },
+    { column: "Email", width: "100px" },
+    { column: "Phone", width: "10px" },
+    { column: "Card", width: "1px" },
+    { column: "Start Date", width: "30px" },
+    { column: "Expire Date", width: "30px" },
+    { column: "Status", width: "30px" },
+  ];
 
-export default function DataGridTable() {
+  React.useEffect(() => {
+    dispatch(fetchApi(data));
+  }, []);
+
+  React.useEffect(() => {
+    pageChange(0);
+  }, [data.length]);
+
+  const handlePageChange = (event, newpage) => {
+    pageChange(newpage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    rowsPerPageChange(+event.target.value);
+    pageChange(0);
+  };
+
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
+    <>
+      <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
+          <TableHead>
+            <TableRow>
+              {columns.map((el, i) => {
+                return (
+                  <TableCell sx={{ fontWeight: 700 }} key={i}>
+                    {el.type === "checkbox" ? (
+                      <Checkbox
+                        sx={{
+                          color: "#1e88e5",
+                          "&.Mui-checked": {
+                            color: "#1e88e5",
+                          },
+                        }}
+                        onClick={(e) => {
+                          dispatch(selectAll(e));
+                        }}
+                      />
+                    ) : (
+                      el.column
+                    )}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.length >= 1 ? (
+              data
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow
+                    key={row.id + 1}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>
+                      <Checkbox
+                        sx={{
+                          color: "#1e88e5",
+                          "&.Mui-checked": {
+                            color: "#1e88e5",
+                          },
+                        }}
+                        color="default"
+                        checked={row.checked || ""}
+                        onClick={(e) => {
+                          dispatch(selectedRow(e, row.id));
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {row.fullName}
+                    </TableCell>
+                    <TableCell align="left">{row.email}</TableCell>
+                    <TableCell align="left">{row.phone}</TableCell>
+                    <TableCell align="left">{row.card}</TableCell>
+                    <TableCell align="left">{row.start_date}</TableCell>
+                    <TableCell align="left">{row.expire_date}</TableCell>
+                    <TableCell align="left">
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <CircleIcon
+                          sx={{
+                            fontSize: "small",
+                            padding: "5px",
+                            color:
+                              row.status === "active"
+                                ? "green"
+                                : "" || row.status === "deactive"
+                                ? "red"
+                                : "black",
+                          }}
+                        />
+                        {String(row.status)}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <h3>No Records Found</h3>
+              </Box>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
         }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-    </Box>
+      >
+        <TablePagination
+          component="div"
+          page={page}
+          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPage={rowsPerPage}
+          count={data.length}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        <Box>Page:{page + 1}</Box>
+      </Box>
+    </>
   );
 }
