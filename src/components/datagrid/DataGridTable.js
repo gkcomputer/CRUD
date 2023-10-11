@@ -1,4 +1,6 @@
 import * as React from "react";
+import axios from "axios";
+import mockData from "../../services/MOCK_DATA.json";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -14,6 +16,7 @@ import {
 } from "../store/actions/fetchApi.action";
 import { Box, Checkbox, Pagination, TablePagination } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function BasicTable() {
   const [page, pageChange] = React.useState(0);
@@ -34,6 +37,7 @@ export default function BasicTable() {
     { column: "Start Date", width: "30px" },
     { column: "Expire Date", width: "30px" },
     { column: "Status", width: "30px" },
+    { column: "Delete", width: "30px" },
   ];
 
   React.useEffect(() => {
@@ -100,7 +104,7 @@ export default function BasicTable() {
                           },
                         }}
                         color="default"
-                        checked={row.checked || ""}
+                        checked={row.checked}
                         onClick={(e) => {
                           dispatch(selectedRow(e, row.id));
                         }}
@@ -121,15 +125,18 @@ export default function BasicTable() {
                             fontSize: "small",
                             padding: "5px",
                             color:
-                              row.status === "active"
+                              row.status === "Active"
                                 ? "green"
-                                : "" || row.status === "deactive"
+                                : "" || row.status === "Deactive"
                                 ? "red"
                                 : "black",
                           }}
                         />
-                        {String(row.status)}
+                        {row.status}
                       </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <DeleteIcon />
                     </TableCell>
                   </TableRow>
                 ))

@@ -12,6 +12,7 @@ export const FetchaApiReducer = (state = initialState, action) => {
         error: null,
       };
     case "FETCH_API_SUCCESS":
+      console.log("data", action.payload);
       return {
         ...state,
         ApiData: action.payload,
@@ -46,8 +47,8 @@ export const FetchaApiReducer = (state = initialState, action) => {
         (el) => el.id === action.payload.row
       );
 
-      console.log("selectrow.checked", selectrow.checked);
-
+      console.log("selectrow.checked", typeof selectrow.checked);
+      debugger;
       const checkedRow =
         selectrow.checked === false
           ? {

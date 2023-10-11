@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { ToastContainer, toast } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
@@ -39,16 +39,28 @@ export const UpdateUser = (props) => {
   });
 
   const dispatch = useDispatch();
+  const data = useSelector((state) => state.apiReducer.ApiData);
+
+  const filterData = data.filter((el) => {
+    return el.checked === true;
+  });
+
+  let inputData = {};
+  for (let i = 0; i < filterData.length; i++) {
+    const obj = filterData[i];
+    inputData = obj;
+  }
+
   const [input, setInput] = useState({
-    id: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-    card: "",
-    start_date: "",
-    expire_date: "",
-    status: "",
+    id: inputData.id || "",
+    first_name: inputData.first_name || "",
+    last_name: inputData.last_name || "",
+    email: inputData.email || "",
+    phone: inputData.phone || "",
+    card: inputData.card || "",
+    start_date: inputData.start_date || "",
+    expire_date: inputData.expire_date || "",
+    status: inputData.status || "",
   });
 
   function handleChange(e) {
@@ -60,7 +72,6 @@ export const UpdateUser = (props) => {
   const handleClear = () => {
     const clearData = {
       ...input,
-      id: "",
       first_name: "",
       last_name: "",
       email: "",
@@ -140,7 +151,7 @@ export const UpdateUser = (props) => {
             name="id"
             value={input.id}
             required
-            type="number"
+            type="text"
             onChange={(e) => {
               handleChange(e);
             }}
@@ -181,8 +192,7 @@ export const UpdateUser = (props) => {
             className="input_feild"
             placeholder="Phone"
             name="phone"
-            type="number"
-            pattern="[0-9]{2}-[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            type="text"
             value={input.phone}
             onChange={(e) => {
               handleChange(e);
@@ -202,7 +212,7 @@ export const UpdateUser = (props) => {
             className="input_feild"
             placeholder="Start Date"
             name="start_date"
-            type="date"
+            type="text"
             required
             value={input.start_date}
             onChange={(e) => {
@@ -213,7 +223,7 @@ export const UpdateUser = (props) => {
             className="input_feild"
             placeholder="Expire Date"
             name="expire_date"
-            type="date"
+            type="text"
             required
             value={input.expire_date}
             onChange={(e) => {
@@ -234,6 +244,7 @@ export const UpdateUser = (props) => {
             >
               <MenuItem value={"active"}>active</MenuItem>
               <MenuItem value={"deactive"}>deactive</MenuItem>
+              <MenuItem value={"blocked"}>deactive</MenuItem>
             </Select>
           </FormControl>
         </div>

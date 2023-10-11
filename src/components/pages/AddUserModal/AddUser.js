@@ -11,9 +11,9 @@ import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { newUser } from "../../store/actions/fetchApi.action";
 import { ToastContainer, toast } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
+import { addNewUser } from "../../store/actions/fetchApi.action";
 
 export const AddUser = (props) => {
   const BootstrapButton = styled(Button)({
@@ -77,7 +77,7 @@ export const AddUser = (props) => {
 
   function submit(e) {
     e.preventDefault();
-    dispatch(newUser(input));
+    dispatch(addNewUser(input));
     handleClear();
   }
 

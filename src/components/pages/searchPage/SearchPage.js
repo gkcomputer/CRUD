@@ -32,7 +32,7 @@ function SearchPage() {
       item.email.toLowerCase().includes(emailInput.toLowerCase())
     );
     const cardFilter = emailFilter.filter((item) =>
-      item.card.includes(cardInput)
+      item.card.toLowerCase().includes(cardInput.toLowerCase())
     );
     dispatch(filteredData(cardFilter));
   };

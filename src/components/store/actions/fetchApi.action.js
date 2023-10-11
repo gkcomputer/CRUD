@@ -1,5 +1,3 @@
-import { generateUniqueText } from "../../../utils";
-
 export const fetchApi = () => {
   return async (dispatch) => {
     dispatch({
@@ -7,7 +5,7 @@ export const fetchApi = () => {
     });
     try {
       const response = await fetch(
-        "https://crud-project-35f4d-default-rtdb.firebaseio.com/updatedusers.json",
+        "https://crud-project-35f4d-default-rtdb.firebaseio.com/userData.json",
         {
           method: "GET",
         }
@@ -19,9 +17,8 @@ export const fetchApi = () => {
       const k = Object.values(apidata)[0];
       const addData = k.map((el) => ({
         ...el,
-        checked: false,
         fullName: el.first_name + " " + el.last_name,
-        id: el.id + generateUniqueText(),
+        checked: false,
       }));
       dispatch({
         type: "FETCH_API_SUCCESS",
@@ -65,11 +62,87 @@ export const selectedRow = (e, id) => {
   };
 };
 
-export const newUser = (item) => {
-  return (dispatch) => {
+// const postData = mockData;
+
+// const apiUrl =
+//   "https://crud-project-35f4d-default-rtdb.firebaseio.com/userData.json"; // Replace with your API endpoint
+
+// const p = () => {
+//   axios
+//     .post(apiUrl, postData)
+//     .then((response) => {
+//       console.log("POST request successful:", response.data);
+//     })
+//     .catch((error) => {
+//       console.error("Error:", error);
+//     });
+// };
+// p();
+
+export const addNewUser = (user) => {
+  console.log("newUser", user);
+  return async (dispatch) => {
     dispatch({
-      type: "NEWUSER",
-      payload: item,
+      type: "ADDING_USER",
     });
+    try {
+      const response = await fetch(
+        "https://crud-project-35f4d-default-rtdb.firebaseio.com/abdul.json",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      );
+      debugger;
+      if (response.ok === 200) {
+        console.log("data inserted successfully");
+      }
+      const data = await response.json();
+      dispatch({
+        type: "ADD_USER",
+        payload: data,
+      });
+    } catch (error) {
+      alert("Error in inserting the data");
+    }
   };
 };
+
+// export const addNewUser = (user) => {
+//   debugger;
+//   return async (dispatch) => {
+//     try {
+//       const response = await axios.post(
+//         "https://crud-project-35f4d-default-rtdb.firebaseio.com/newUsers.json",
+//         user,
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+
+//       if (response.status === 200) {
+//         console.log("Data inserted successfully");
+//       } else {
+//         console.error("Failed to insert data");
+//       }
+
+//       const data = response.data;
+
+//       dispatch({
+//         type: "ADD_USER",
+//         payload: data,
+//       });
+//     } catch (error) {
+//       console.error("Error in inserting the data:", error);
+//       alert("Error in inserting the data");
+//     }
+//   };
+// };
+
+// // Usage: Call the function with the data to be added
+// addNewUser(mockData);
