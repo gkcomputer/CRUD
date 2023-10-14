@@ -4,12 +4,9 @@ export const fetchApi = () => {
       type: "FETCH_API_LOADING",
     });
     try {
-      const response = await fetch(
-        "https://crud-project-35f4d-default-rtdb.firebaseio.com/userData.json",
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(process.env.REACT_APP_URL, {
+        method: "GET",
+      });
       const apidata = await response.json();
       // const k = Object.keys(apidata)
       //   .map((el) => apidata[el])
@@ -20,6 +17,7 @@ export const fetchApi = () => {
         fullName: el.first_name + " " + el.last_name,
         checked: false,
       }));
+      console.log("env", process.env);
       dispatch({
         type: "FETCH_API_SUCCESS",
         payload: addData,
@@ -65,7 +63,7 @@ export const selectedRow = (e, id) => {
 // const postData = mockData;
 
 // const apiUrl =
-//   "https://crud-project-35f4d-default-rtdb.firebaseio.com/userData.json"; // Replace with your API endpoint
+//   process.env.REACT_APP_URL; // Replace with your API endpoint
 
 // const p = () => {
 //   axios
@@ -86,16 +84,13 @@ export const addNewUser = (user) => {
       type: "ADDING_USER",
     });
     try {
-      const response = await fetch(
-        "https://crud-project-35f4d-default-rtdb.firebaseio.com/abdul.json",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        }
-      );
+      const response = await fetch(process.env.REACT_APP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
       debugger;
       if (response.ok === 200) {
         console.log("data inserted successfully");
@@ -116,7 +111,7 @@ export const addNewUser = (user) => {
 //   return async (dispatch) => {
 //     try {
 //       const response = await axios.post(
-//         "https://crud-project-35f4d-default-rtdb.firebaseio.com/newUsers.json",
+//         process.env.REACT_APP_URL,
 //         user,
 //         {
 //           headers: {
