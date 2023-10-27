@@ -14,6 +14,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { ToastContainer, toast } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import { addNewUser } from "../../store/actions/fetchApi.action";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const AddUser = (props) => {
   const BootstrapButton = styled(Button)({
@@ -79,13 +80,7 @@ export const AddUser = (props) => {
   function submit(e) {
     e.preventDefault();
     dispatch(addNewUser(input));
-    handleClear();
   }
-
-  const toastfy = () => {
-    toast.success("User Added Successfully");
-    toast.error("Something went wrong..!");
-  };
 
   return (
     <>
@@ -98,33 +93,26 @@ export const AddUser = (props) => {
           }}
           onClick={props.close}
         >
-          <HighlightOffIcon fontSize="medium" />
+          <CloseIcon
+            sx={{
+              "&:hover": {
+                color: "white",
+                background: "#BCBCBB",
+                borderRadius: "15px",
+              },
+            }}
+            fontSize="medium"
+          />
         </div>
         <div className="row1">
           <div>
             <p className="text1">Add New User</p>
           </div>
           <div className="row1_btns">
-            <BootstrapButton
-              variant="contained"
-              disableRipple
-              type="submit"
-              onClick={toastfy}
-            >
+            <BootstrapButton variant="contained" disableRipple type="submit">
               Add User
             </BootstrapButton>
-            <ToastContainer
-              position="top-center"
-              theme="light"
-              autoClose={3000}
-              hideProgressBar
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
+            <ToastContainer />
             <BootstrapButton
               variant="contained"
               disableRipple
@@ -138,7 +126,7 @@ export const AddUser = (props) => {
         <div className="user_inputs">
           <TextField
             className="input_feild"
-            placeholder="ID"
+            label="ID"
             name="id"
             value={input.id}
             required
@@ -149,7 +137,7 @@ export const AddUser = (props) => {
           ></TextField>
           <TextField
             className="input_feild"
-            placeholder="First Name"
+            label="First Name"
             name="first_name"
             value={input.first_name}
             required
@@ -160,7 +148,7 @@ export const AddUser = (props) => {
 
           <TextField
             className="input_feild"
-            placeholder="Last Name"
+            label="Last Name"
             name="last_name"
             value={input.last_name}
             required
@@ -170,7 +158,7 @@ export const AddUser = (props) => {
           ></TextField>
           <TextField
             className="input_feild"
-            placeholder="Email"
+            label="Email"
             name="email"
             value={input.email}
             required
@@ -181,7 +169,7 @@ export const AddUser = (props) => {
           ></TextField>
           <TextField
             className="input_feild"
-            placeholder="Phone"
+            label="Phone"
             name="phone"
             type="number"
             pattern="[0-9]{2}-[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -192,7 +180,7 @@ export const AddUser = (props) => {
           ></TextField>
           <TextField
             className="input_feild"
-            placeholder="Card"
+            label="Card"
             name="card"
             required
             value={input.card}
@@ -202,7 +190,7 @@ export const AddUser = (props) => {
           ></TextField>
           <TextField
             className="input_feild"
-            placeholder="Start Date"
+            label="Start Date"
             name="start_date"
             type="date"
             required
@@ -213,7 +201,7 @@ export const AddUser = (props) => {
           ></TextField>
           <TextField
             className="input_feild"
-            placeholder="Expire Date"
+            label="Expire Date"
             name="expire_date"
             type="date"
             required

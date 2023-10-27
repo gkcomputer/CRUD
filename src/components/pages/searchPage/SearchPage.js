@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../../assests/logo.jpg";
 import { Button, TextField } from "@mui/material";
 import DataGridTable from "../../datagrid/DataGridTable";
@@ -19,12 +19,14 @@ function SearchPage() {
   const emailInput = useSelector((state) => state.serarchData.email);
   const cardInput = useSelector((state) => state.serarchData.card);
 
-  const handleSerachClick = () => {
+  useEffect(() => {
     if (nameInput === "" && emailInput === "" && cardInput === "") {
       dispatch(fetchApi(data));
       return;
     }
+  }, [nameInput, emailInput, cardInput]);
 
+  const handleSerachClick = () => {
     const nameFilter = data.filter((item) =>
       item.fullName.toLowerCase().includes(nameInput.toLowerCase())
     );

@@ -9,7 +9,6 @@ import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteModal,
-  delteUser,
   fetchApi,
   selectAll,
   selectedRow,
@@ -18,17 +17,17 @@ import {
 import { Box, Checkbox, Stack, TablePagination } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import UserDeleteModal from "../pages/userDeleteModal/UserDeleteModal";
+import CircularWithValueLabel from "../loader/LinearIndeterminate";
+import LinearIndeterminate from "../loader/LinearIndeterminate";
+import { ToastContainer } from "react-toastify";
 
 export default function BasicTable() {
   const [page, pageChange] = React.useState(0);
   const [rowsPerPage, rowsPerPageChange] = React.useState(5);
   const data = useSelector((state) => state.apiReducer.ApiData);
+  const isLoad = useSelector((state) => state.apiReducer.isLoading);
   const dispatch = useDispatch();
-  console.log("my data", data);
 
   const columns = [
     {
@@ -92,79 +91,83 @@ export default function BasicTable() {
               })}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {data.length >= 1 ? (
-              data
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow
-                    key={row.id + 1}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>
-                      <Checkbox
-                        sx={{
-                          color: "#1e88e5",
-                          "&.Mui-checked": {
-                            color: "#1e88e5",
-                          },
-                        }}
-                        color="default"
-                        checked={row.checked}
-                        onClick={(e) => {
-                          dispatch(selectedRow(e, row.id));
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
-                      {row.fullName}
-                    </TableCell>
-                    <TableCell align="left">{row.email}</TableCell>
-                    <TableCell align="left">{row.phone}</TableCell>
-                    <TableCell align="left">{row.card}</TableCell>
-                    <TableCell align="left">{row.start_date}</TableCell>
-                    <TableCell align="left">{row.expire_date}</TableCell>
-                    <TableCell align="left">
-                      <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <CircleIcon
+          {isLoad ? (
+            <LinearIndeterminate />
+          ) : (
+            <TableBody>
+              {data.length >= 1 ? (
+                data
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <TableRow
+                      key={row.id + 1}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell>
+                        <Checkbox
                           sx={{
-                            fontSize: "small",
-                            padding: "5px",
-                            color:
-                              row.status === "Active"
-                                ? "green"
-                                : "" || row.status === "Deactive"
-                                ? "red"
-                                : "black",
+                            color: "#1e88e5",
+                            "&.Mui-checked": {
+                              color: "#1e88e5",
+                            },
+                          }}
+                          color="default"
+                          checked={row.checked}
+                          onClick={(e) => {
+                            dispatch(selectedRow(e, row.id));
                           }}
                         />
-                        {row.status}
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <DeleteIcon
-                        sx={{ "&:hover": { color: "red" } }}
-                        onClick={() => {
-                          dispatch(userToDelete(row));
-                          dispatch(deleteModal(true));
-                        }}
-                      />
-                      <UserDeleteModal />
-                    </TableCell>
-                  </TableRow>
-                ))
-            ) : (
-              <Stack
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <h3>No Records Found</h3>
-              </Stack>
-            )}
-          </TableBody>
+                      </TableCell>
+                      <TableCell component="th" scope="row" align="left">
+                        {row.fullName}
+                      </TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
+                      <TableCell align="left">{row.phone}</TableCell>
+                      <TableCell align="left">{row.card}</TableCell>
+                      <TableCell align="left">{row.start_date}</TableCell>
+                      <TableCell align="left">{row.expire_date}</TableCell>
+                      <TableCell align="left">
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <CircleIcon
+                            sx={{
+                              fontSize: "small",
+                              padding: "5px",
+                              color:
+                                row.status === "Active"
+                                  ? "green"
+                                  : "" || row.status === "Deactive"
+                                  ? "red"
+                                  : "black",
+                            }}
+                          />
+                          {row.status}
+                        </Box>
+                      </TableCell>
+                      <TableCell align="center">
+                        <DeleteIcon
+                          sx={{ "&:hover": { color: "red" } }}
+                          onClick={() => {
+                            dispatch(userToDelete(row));
+                            dispatch(deleteModal(true));
+                          }}
+                        />
+                        <UserDeleteModal />
+                      </TableCell>
+                    </TableRow>
+                  ))
+              ) : (
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <h3>No Records Found</h3>
+                </Stack>
+              )}
+            </TableBody>
+          )}
         </Table>
       </TableContainer>
       <Stack
@@ -186,6 +189,7 @@ export default function BasicTable() {
         />
         <Stack>Page:{page + 1}</Stack>
       </Stack>
+      <ToastContainer />
     </>
   );
 }

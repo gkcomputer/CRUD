@@ -1,7 +1,11 @@
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const fetchApi = () => {
   return async (dispatch) => {
     dispatch({
       type: "FETCH_API_LOADING",
+      payload: true,
     });
     try {
       const response = await fetch(process.env.REACT_APP_URL, {
@@ -36,10 +40,25 @@ export const fetchApi = () => {
         type: "FETCH_API_SUCCESS",
         payload: finalData,
       });
+      dispatch({
+        type: "FETCH_API_LOADING",
+        payload: false,
+      });
+      toast.success("Data Fetch success", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     } catch (error) {
+      toast.error("Something went wrong", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
       dispatch({
         type: "FETCH_API_FAILURE",
         payload: error,
+      });
+      dispatch({
+        type: "FETCH_API_LOADING",
+        payload: false,
       });
     }
   };
@@ -118,9 +137,22 @@ export const addNewUser = (user) => {
         },
         body: JSON.stringify(user),
       });
+      toast.success("User Added Successfully", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       await dispatch(fetchApi());
+      dispatch({
+        type: "ADD_USER",
+        payload: true,
+      });
     } catch (error) {
-      alert("Error in inserting the data");
+      toast.error("Something went wrong", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      dispatch({
+        type: "ADD_USER",
+        payload: false,
+      });
     }
   };
 };

@@ -6,6 +6,7 @@ import Fade from "@mui/material/Fade";
 import { Button } from "@mui/material";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import { AddUser } from "./AddUser";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -22,6 +23,7 @@ const style = {
 };
 
 export default function TransitionsModal() {
+  const user = useSelector((state) => state.apiReducer.userAdded);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -29,6 +31,14 @@ export default function TransitionsModal() {
   const close = () => {
     setOpen(!open);
   };
+
+  React.useMemo(() => {
+    if (user) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [user]);
 
   return (
     <div>

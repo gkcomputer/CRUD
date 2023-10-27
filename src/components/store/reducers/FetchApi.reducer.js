@@ -3,6 +3,8 @@ const initialState = {
   selectedRow: {},
   deleteUser: null,
   modalShow: false,
+  isLoading: true,
+  userAdded: false,
 };
 
 export const FetchaApiReducer = (state = initialState, action) => {
@@ -10,7 +12,7 @@ export const FetchaApiReducer = (state = initialState, action) => {
     case "FETCH_API_LOADING":
       return {
         ...state,
-        isLoading: true,
+        isLoading: action.payload,
         error: null,
       };
     case "FETCH_API_SUCCESS":
@@ -37,11 +39,11 @@ export const FetchaApiReducer = (state = initialState, action) => {
       }));
       return { ...state, ApiData: updated };
 
-    // case "ADD_USER":
-    //   return {
-    //     ...state,
-    //     ApiData: [...state.ApiData, { ...action.payload }],
-    //   };
+    case "ADD_USER":
+      return {
+        ...state,
+        userAdded: action.payload,
+      };
 
     case "DELETE_USER":
       return {
