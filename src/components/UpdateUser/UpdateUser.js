@@ -13,8 +13,10 @@ import { useDispatch, useSelector } from "react-redux";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { ToastContainer, toast } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
+import { editUser, selectedRow } from "../store/actions/fetchApi.action";
 
 export const UpdateUser = (props) => {
+  console.log("props", props);
   const BootstrapButton = styled(Button)({
     boxShadow: "none",
     textTransform: "none",
@@ -41,15 +43,14 @@ export const UpdateUser = (props) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.apiReducer.ApiData);
 
-  const filterData = data.filter((el) => {
+  const filterData = data.find((el) => {
     return el.checked === true;
   });
 
-  let inputData = {};
-  for (let i = 0; i < filterData.length; i++) {
-    const obj = filterData[i];
-    inputData = obj;
-  }
+  console.log("filterData", filterData);
+  console.log("data", data);
+
+  let inputData = filterData;
 
   const [input, setInput] = useState({
     id: inputData.id || "",
@@ -61,7 +62,11 @@ export const UpdateUser = (props) => {
     start_date: inputData.start_date || "",
     expire_date: inputData.expire_date || "",
     status: inputData.status || "",
+    key: inputData.key,
+    checked: false,
   });
+
+  console.log("input", input);
 
   function handleChange(e) {
     const newData = { ...input };
@@ -89,11 +94,12 @@ export const UpdateUser = (props) => {
     e.preventDefault();
     // dispatch(newUser(input));
     handleClear();
+    props.modalclose();
+    dispatch(editUser(input));
   }
 
   const toastfy = () => {
     toast.success("User Added Successfully");
-    toast.error("Something went wrong..!");
   };
 
   return (
@@ -152,9 +158,6 @@ export const UpdateUser = (props) => {
             value={input.id}
             required
             type="text"
-            onChange={(e) => {
-              handleChange(e);
-            }}
           ></TextField>
           <TextField
             className="input_feild"
@@ -242,9 +245,9 @@ export const UpdateUser = (props) => {
                 handleChange(event);
               }}
             >
-              <MenuItem value={"active"}>active</MenuItem>
-              <MenuItem value={"deactive"}>deactive</MenuItem>
-              <MenuItem value={"blocked"}>deactive</MenuItem>
+              <MenuItem value={"Active"}>Active</MenuItem>
+              <MenuItem value={"Deactive"}>Deactive</MenuItem>
+              <MenuItem value={"Blocked"}>Blocked</MenuItem>
             </Select>
           </FormControl>
         </div>

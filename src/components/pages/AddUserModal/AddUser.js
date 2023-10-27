@@ -50,6 +50,7 @@ export const AddUser = (props) => {
     start_date: "",
     expire_date: "",
     status: "",
+    checked: "false",
   });
 
   function handleChange(e) {
@@ -233,8 +234,8 @@ export const AddUser = (props) => {
                 handleChange(event);
               }}
             >
-              <MenuItem value={"active"}>active</MenuItem>
-              <MenuItem value={"deactive"}>deactive</MenuItem>
+              <MenuItem value={"Active"}>active</MenuItem>
+              <MenuItem value={"Deactive"}>deactive</MenuItem>
             </Select>
           </FormControl>
         </div>

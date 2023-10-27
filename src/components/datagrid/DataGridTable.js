@@ -1,6 +1,4 @@
 import * as React from "react";
-import axios from "axios";
-import mockData from "../../services/MOCK_DATA.json";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,19 +8,27 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteModal,
+  delteUser,
   fetchApi,
   selectAll,
   selectedRow,
+  userToDelete,
 } from "../store/actions/fetchApi.action";
-import { Box, Checkbox, Pagination, TablePagination } from "@mui/material";
+import { Box, Checkbox, Stack, TablePagination } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import UserDeleteModal from "../pages/userDeleteModal/UserDeleteModal";
 
 export default function BasicTable() {
   const [page, pageChange] = React.useState(0);
   const [rowsPerPage, rowsPerPageChange] = React.useState(5);
   const data = useSelector((state) => state.apiReducer.ApiData);
   const dispatch = useDispatch();
+  console.log("my data", data);
 
   const columns = [
     {
@@ -136,12 +142,19 @@ export default function BasicTable() {
                       </Box>
                     </TableCell>
                     <TableCell align="center">
-                      <DeleteIcon />
+                      <DeleteIcon
+                        sx={{ "&:hover": { color: "red" } }}
+                        onClick={() => {
+                          dispatch(userToDelete(row));
+                          dispatch(deleteModal(true));
+                        }}
+                      />
+                      <UserDeleteModal />
                     </TableCell>
                   </TableRow>
                 ))
             ) : (
-              <Box
+              <Stack
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -149,16 +162,17 @@ export default function BasicTable() {
                 }}
               >
                 <h3>No Records Found</h3>
-              </Box>
+              </Stack>
             )}
           </TableBody>
         </Table>
       </TableContainer>
-      <Box
+      <Stack
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
+          flexDirection: "row",
         }}
       >
         <TablePagination
@@ -170,8 +184,8 @@ export default function BasicTable() {
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-        <Box>Page:{page + 1}</Box>
-      </Box>
+        <Stack>Page:{page + 1}</Stack>
+      </Stack>
     </>
   );
 }

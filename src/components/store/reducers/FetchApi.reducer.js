@@ -1,6 +1,8 @@
 const initialState = {
   ApiData: [],
   selectedRow: {},
+  deleteUser: null,
+  modalShow: false,
 };
 
 export const FetchaApiReducer = (state = initialState, action) => {
@@ -12,7 +14,6 @@ export const FetchaApiReducer = (state = initialState, action) => {
         error: null,
       };
     case "FETCH_API_SUCCESS":
-      console.log("data", action.payload);
       return {
         ...state,
         ApiData: action.payload,
@@ -36,19 +37,28 @@ export const FetchaApiReducer = (state = initialState, action) => {
       }));
       return { ...state, ApiData: updated };
 
-    case "NEWUSER":
+    // case "ADD_USER":
+    //   return {
+    //     ...state,
+    //     ApiData: [...state.ApiData, { ...action.payload }],
+    //   };
+
+    case "DELETE_USER":
       return {
         ...state,
-        ApiData: [...state.ApiData, { ...action.payload }],
+        deleteUser: action.payload,
       };
+    case "MODAL":
+      return {
+        ...state,
+        modalShow: action.payload,
+      };
+
     case "SELECTED_ROW":
       const ID = action.payload.row;
       const selectrow = state.ApiData.find(
         (el) => el.id === action.payload.row
       );
-
-      console.log("selectrow.checked", typeof selectrow.checked);
-      debugger;
       const checkedRow =
         selectrow.checked === false
           ? {
@@ -67,9 +77,6 @@ export const FetchaApiReducer = (state = initialState, action) => {
           return el;
         }
       });
-
-      console.log("upDatedData", upDatedData);
-
       return {
         ...state,
         selectedRow: checkedRow,

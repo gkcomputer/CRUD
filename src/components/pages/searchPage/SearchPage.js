@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../../assests/logo.jpg";
 import { Button, TextField } from "@mui/material";
 import DataGridTable from "../../datagrid/DataGridTable";
@@ -85,6 +85,7 @@ function SearchPage() {
               onChange={(e) => {
                 dispatch(nameSearch(e.target.value));
               }}
+              autoFocus
             />
             <TextField
               label="Email"

@@ -8,19 +8,33 @@ export const fetchApi = () => {
         method: "GET",
       });
       const apidata = await response.json();
-      // const k = Object.keys(apidata)
-      //   .map((el) => apidata[el])
-      //   .flat();
-      const k = Object.values(apidata)[0];
-      const addData = k.map((el) => ({
+
+      let usersData = [];
+
+      for (const key in apidata) {
+        const obj = { ...apidata[key], key };
+        usersData.push(obj);
+      }
+
+      const finalData = usersData.map((el) => ({
         ...el,
         fullName: el.first_name + " " + el.last_name,
         checked: false,
       }));
-      console.log("env", process.env);
+
+      // const k = Object.keys(apidata)
+      //   .map((el) => apidata[el])
+      //   .flat();
+      // const k = Object.values(apidata)[0];
+      // const addData = k.map((el) => ({
+      //   ...el,
+      //   fullName: el.first_name + " " + el.last_name,
+      //   checked: false,
+      // }));
+
       dispatch({
         type: "FETCH_API_SUCCESS",
-        payload: addData,
+        payload: finalData,
       });
     } catch (error) {
       dispatch({
@@ -60,84 +74,112 @@ export const selectedRow = (e, id) => {
   };
 };
 
-// const postData = mockData;
+export const editUser = (updateUser) => {
+  return async (dispatch) => {
+    try {
+      await fetch(`${process.env.REACT_APP_PUT_URL}/${updateUser.key}.json`, {
+        method: "PUT",
+        body: JSON.stringify(updateUser),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      await dispatch(fetchApi());
 
-// const apiUrl =
-//   process.env.REACT_APP_URL; // Replace with your API endpoint
-
-// const p = () => {
-//   axios
-//     .post(apiUrl, postData)
-//     .then((response) => {
-//       console.log("POST request successful:", response.data);
-//     })
-//     .catch((error) => {
-//       console.error("Error:", error);
-//     });
-// };
-// p();
+      // const response = await fetch(process.env.REACT_APP_URL, {
+      //   method: "GET",
+      // });
+      // const apidata = await response.json();
+      // for (const key in apidata) {
+      //   if (apidata[key].id === updateUser.id) {
+      //     const updatedUserData = { ...apidata[key], ...updateUser };
+      //     console.log("my updatedUserData", updatedUserData);
+      //     await fetch(`${process.env.REACT_APP_PUT_URL}/${key}.json`, {
+      //       method: "PUT",
+      //       body: JSON.stringify(updatedUserData),
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     });
+      //   }
+      //   await dispatch(fetchApi());
+      // }
+    } catch (error) {}
+  };
+};
 
 export const addNewUser = (user) => {
-  console.log("newUser", user);
   return async (dispatch) => {
-    dispatch({
-      type: "ADDING_USER",
-    });
     try {
-      const response = await fetch(process.env.REACT_APP_URL, {
+      await fetch(process.env.REACT_APP_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(user),
       });
-      debugger;
-      if (response.ok === 200) {
-        console.log("data inserted successfully");
-      }
-      const data = await response.json();
-      dispatch({
-        type: "ADD_USER",
-        payload: data,
-      });
+      await dispatch(fetchApi());
     } catch (error) {
       alert("Error in inserting the data");
     }
   };
 };
 
-// export const addNewUser = (user) => {
-//   debugger;
-//   return async (dispatch) => {
-//     try {
-//       const response = await axios.post(
-//         process.env.REACT_APP_URL,
-//         user,
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
+export const userToDelete = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: "DELETE_USER",
+      payload: data,
+    });
+  };
+};
 
-//       if (response.status === 200) {
-//         console.log("Data inserted successfully");
-//       } else {
-//         console.error("Failed to insert data");
-//       }
+export const deleteModal = (state) => {
+  return {
+    type: "MODAL",
+    payload: state,
+  };
+};
 
-//       const data = response.data;
+export const delteUser = (idToDelete) => {
+  console.log("delete", idToDelete);
+  return async (dispatch) => {
+    dispatch({
+      type: "DELETING_USER",
+      payload: true,
+    });
+    try {
+      const response = await fetch(process.env.REACT_APP_URL, {
+        method: "GET",
+      });
+      const data = await response.json();
 
-//       dispatch({
-//         type: "ADD_USER",
-//         payload: data,
-//       });
-//     } catch (error) {
-//       console.error("Error in inserting the data:", error);
-//       alert("Error in inserting the data");
-//     }
-//   };
-// };
+      let keyToDelete = null;
+      for (const key in data) {
+        if (data[key].id === idToDelete.id) {
+          keyToDelete = key;
+          break; // Stop after finding the first match (assuming there's only one with id "123")
+        }
+      }
 
-// // Usage: Call the function with the data to be added
-// addNewUser(mockData);
+      if (keyToDelete) {
+        // Perform the DELETE request for the specific item
+        await fetch(`${process.env.REACT_APP_PUT_URL}/${keyToDelete}.json`, {
+          method: "DELETE",
+        });
+      } else {
+        console.log("Data not found.");
+      }
+      await dispatch(fetchApi());
+      dispatch({
+        type: "DELETING_USER",
+        payload: false,
+      });
+    } catch (error) {
+      dispatch({
+        type: "DELETING_USER",
+        payload: false,
+      });
+    }
+  };
+};

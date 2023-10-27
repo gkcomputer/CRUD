@@ -29,6 +29,10 @@ export default function UpdateUserModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const modalClose = () => {
+    setOpen(false);
+  };
+
   const close = () => {
     setOpen(!open);
   };
@@ -83,7 +87,7 @@ export default function UpdateUserModal() {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <UpdateUser close={close} />
+            <UpdateUser close={close} modalclose={modalClose} />
           </Box>
         </Fade>
       </Modal>
