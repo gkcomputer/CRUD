@@ -93,6 +93,12 @@ export const selectedRow = (e, id) => {
   };
 };
 
+export const editModal = (state) => {
+  return (dispatch) => {
+    dispatch({ type: "EDITMODAL", payload: state });
+  };
+};
+
 export const editUser = (updateUser) => {
   return async (dispatch) => {
     try {
@@ -103,27 +109,29 @@ export const editUser = (updateUser) => {
           "Content-Type": "application/json",
         },
       });
+      toast.success("User Updated Successfully", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       await dispatch(fetchApi());
+      dispatch({
+        type: "EDITUSER_STATUS",
+        payload: false,
+      });
+    } catch (error) {
+      dispatch({
+        type: "EDITUSER_STATUS",
+        payload: true,
+      });
+      toast.error("Something went wrong", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
+};
 
-      // const response = await fetch(process.env.REACT_APP_URL, {
-      //   method: "GET",
-      // });
-      // const apidata = await response.json();
-      // for (const key in apidata) {
-      //   if (apidata[key].id === updateUser.id) {
-      //     const updatedUserData = { ...apidata[key], ...updateUser };
-      //     console.log("my updatedUserData", updatedUserData);
-      //     await fetch(`${process.env.REACT_APP_PUT_URL}/${key}.json`, {
-      //       method: "PUT",
-      //       body: JSON.stringify(updatedUserData),
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     });
-      //   }
-      //   await dispatch(fetchApi());
-      // }
-    } catch (error) {}
+export const newUserModal = (data) => {
+  return (dispatch) => {
+    dispatch({ type: "NEWUSER_MODAL", payload: data });
   };
 };
 
@@ -142,16 +150,16 @@ export const addNewUser = (user) => {
       });
       await dispatch(fetchApi());
       dispatch({
-        type: "ADD_USER",
-        payload: true,
+        type: "ADD_USER_MODAL",
+        payload: false,
       });
     } catch (error) {
       toast.error("Something went wrong", {
         position: toast.POSITION.TOP_CENTER,
       });
       dispatch({
-        type: "ADD_USER",
-        payload: false,
+        type: "ADD_USER_MODAL",
+        payload: true,
       });
     }
   };
@@ -173,44 +181,28 @@ export const deleteModal = (state) => {
   };
 };
 
-export const delteUser = (idToDelete) => {
-  console.log("delete", idToDelete);
+export const delteUser = (keyToDelete) => {
   return async (dispatch) => {
-    dispatch({
-      type: "DELETING_USER",
-      payload: true,
-    });
     try {
-      const response = await fetch(process.env.REACT_APP_URL, {
-        method: "GET",
+      await fetch(`${process.env.REACT_APP_PUT_URL}/${keyToDelete}.json`, {
+        method: "DELETE",
       });
-      const data = await response.json();
 
-      let keyToDelete = null;
-      for (const key in data) {
-        if (data[key].id === idToDelete.id) {
-          keyToDelete = key;
-          break; // Stop after finding the first match (assuming there's only one with id "123")
-        }
-      }
-
-      if (keyToDelete) {
-        // Perform the DELETE request for the specific item
-        await fetch(`${process.env.REACT_APP_PUT_URL}/${keyToDelete}.json`, {
-          method: "DELETE",
-        });
-      } else {
-        console.log("Data not found.");
-      }
-      await dispatch(fetchApi());
       dispatch({
-        type: "DELETING_USER",
+        type: "USER_DELETED_MODAL",
         payload: false,
       });
+      toast.success("User Deleted", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      await dispatch(fetchApi());
     } catch (error) {
       dispatch({
-        type: "DELETING_USER",
-        payload: false,
+        type: "USER_DELETED_MODAL",
+        payload: true,
+      });
+      toast.error("User Not Deleted", {
+        position: toast.POSITION.TOP_CENTER,
       });
     }
   };

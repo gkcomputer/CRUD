@@ -18,7 +18,6 @@ import { Box, Checkbox, Stack, TablePagination } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UserDeleteModal from "../pages/userDeleteModal/UserDeleteModal";
-import CircularWithValueLabel from "../loader/LinearIndeterminate";
 import LinearIndeterminate from "../loader/LinearIndeterminate";
 import { ToastContainer } from "react-toastify";
 
@@ -26,6 +25,8 @@ export default function BasicTable() {
   const [page, pageChange] = React.useState(0);
   const [rowsPerPage, rowsPerPageChange] = React.useState(5);
   const data = useSelector((state) => state.apiReducer.ApiData);
+  const filteredData = useSelector((state) => state.apiReducer.filterData);
+
   const isLoad = useSelector((state) => state.apiReducer.isLoading);
   const dispatch = useDispatch();
 
@@ -51,7 +52,7 @@ export default function BasicTable() {
 
   React.useEffect(() => {
     pageChange(0);
-  }, [data.length]);
+  }, [filteredData.length]);
 
   const handlePageChange = (event, newpage) => {
     pageChange(newpage);
@@ -95,8 +96,8 @@ export default function BasicTable() {
             <LinearIndeterminate />
           ) : (
             <TableBody>
-              {data.length >= 1 ? (
-                data
+              {filteredData.length >= 1 ? (
+                filteredData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <TableRow
@@ -183,7 +184,7 @@ export default function BasicTable() {
           page={page}
           rowsPerPageOptions={[5, 10, 25]}
           rowsPerPage={rowsPerPage}
-          count={data.length}
+          count={filteredData.length}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />

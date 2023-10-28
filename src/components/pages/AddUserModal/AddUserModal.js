@@ -6,7 +6,8 @@ import Fade from "@mui/material/Fade";
 import { Button } from "@mui/material";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import { AddUser } from "./AddUser";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { newUserModal } from "../../store/actions/fetchApi.action";
 
 const style = {
   position: "absolute",
@@ -23,27 +24,15 @@ const style = {
 };
 
 export default function TransitionsModal() {
-  const user = useSelector((state) => state.apiReducer.userAdded);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const close = () => {
-    setOpen(!open);
-  };
-
-  React.useMemo(() => {
-    if (user) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  }, [user]);
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state.apiReducer.userModal);
 
   return (
     <div>
       <Button
-        onClick={handleOpen}
+        onClick={() => {
+          dispatch(newUserModal(true));
+        }}
         className="iconbtn"
         sx={{ borderRadius: "5px" }}
         variant="contained"
@@ -53,8 +42,10 @@ export default function TransitionsModal() {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={state}
+        onClose={() => {
+          dispatch(newUserModal(false));
+        }}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -63,9 +54,9 @@ export default function TransitionsModal() {
           },
         }}
       >
-        <Fade in={open}>
+        <Fade in={state}>
           <Box sx={style}>
-            <AddUser close={close} />
+            <AddUser />
           </Box>
         </Fade>
       </Modal>

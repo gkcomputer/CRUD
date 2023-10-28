@@ -10,13 +10,12 @@ import {
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
-import { editUser, selectedRow } from "../store/actions/fetchApi.action";
+import { editModal, editUser } from "../store/actions/fetchApi.action";
+import CloseIcon from "@mui/icons-material/Close";
 
-export const UpdateUser = (props) => {
-  console.log("props", props);
+export const UpdateUser = () => {
   const BootstrapButton = styled(Button)({
     boxShadow: "none",
     textTransform: "none",
@@ -41,32 +40,41 @@ export const UpdateUser = (props) => {
   });
 
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.apiReducer.ApiData);
+  const data = useSelector((state) => state.apiReducer.filterData);
 
-  const filterData = data.find((el) => {
-    return el.checked === true;
+  // Move the useState hook to the top and initialize the state
+  const [input, setInput] = useState(() => {
+    if (!data || data.length === 0) {
+      return {
+        id: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        card: "",
+        start_date: "",
+        expire_date: "",
+        status: "",
+        key: null,
+        checked: false,
+      };
+    } else {
+      const filterData = data.find((el) => el.checked === true);
+      return {
+        id: filterData.id || "",
+        first_name: filterData.first_name || "",
+        last_name: filterData.last_name || "",
+        email: filterData.email || "",
+        phone: filterData.phone || "",
+        card: filterData.card || "",
+        start_date: filterData.start_date || "",
+        expire_date: filterData.expire_date || "",
+        status: filterData.status || "",
+        key: filterData.key,
+        checked: false,
+      };
+    }
   });
-
-  console.log("filterData", filterData);
-  console.log("data", data);
-
-  let inputData = filterData;
-
-  const [input, setInput] = useState({
-    id: inputData.id || "",
-    first_name: inputData.first_name || "",
-    last_name: inputData.last_name || "",
-    email: inputData.email || "",
-    phone: inputData.phone || "",
-    card: inputData.card || "",
-    start_date: inputData.start_date || "",
-    expire_date: inputData.expire_date || "",
-    status: inputData.status || "",
-    key: inputData.key,
-    checked: false,
-  });
-
-  console.log("input", input);
 
   function handleChange(e) {
     const newData = { ...input };
@@ -92,15 +100,8 @@ export const UpdateUser = (props) => {
 
   function submit(e) {
     e.preventDefault();
-    // dispatch(newUser(input));
-    handleClear();
-    props.modalclose();
     dispatch(editUser(input));
   }
-
-  const toastfy = () => {
-    toast.success("User Added Successfully");
-  };
 
   return (
     <>
@@ -111,35 +112,30 @@ export const UpdateUser = (props) => {
             alignItems: "center",
             justifyContent: "flex-end",
           }}
-          onClick={props.close}
         >
-          <HighlightOffIcon fontSize="medium" />
+          <CloseIcon
+            sx={{
+              "&:hover": {
+                color: "white",
+                background: "#BCBCBB",
+                borderRadius: "15px",
+              },
+            }}
+            onClick={() => {
+              dispatch(editModal(false));
+            }}
+            fontSize="medium"
+          />
         </div>
         <div className="row1">
           <div>
             <p className="text1">Update Details</p>
           </div>
           <div className="row1_btns">
-            <BootstrapButton
-              variant="contained"
-              disableRipple
-              type="submit"
-              onClick={toastfy}
-            >
-              Save Changes
+            <BootstrapButton variant="contained" disableRipple type="submit">
+              Save
             </BootstrapButton>
-            <ToastContainer
-              position="top-center"
-              theme="light"
-              autoClose={3000}
-              hideProgressBar
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
+            <ToastContainer />
             <BootstrapButton
               variant="contained"
               disableRipple

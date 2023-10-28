@@ -8,15 +8,22 @@ import {
   TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
-import { addNewUser } from "../../store/actions/fetchApi.action";
 import CloseIcon from "@mui/icons-material/Close";
+import { generateUniqueID } from "../../../utils";
+import { addNewUser, newUserModal } from "../../store/actions/fetchApi.action";
 
 export const AddUser = (props) => {
+  const [newId, setNewId] = useState();
+
+  useEffect(() => {
+    const uniqueID = generateUniqueID();
+    setNewId(uniqueID);
+  }, []);
+
   const BootstrapButton = styled(Button)({
     boxShadow: "none",
     textTransform: "none",
@@ -57,7 +64,7 @@ export const AddUser = (props) => {
   function handleChange(e) {
     const newData = { ...input };
     newData[e.target.name] = e.target.value;
-    setInput(newData);
+    setInput({ ...newData, id: newId });
   }
 
   const handleClear = () => {
@@ -91,7 +98,6 @@ export const AddUser = (props) => {
             alignItems: "center",
             justifyContent: "flex-end",
           }}
-          onClick={props.close}
         >
           <CloseIcon
             sx={{
@@ -100,6 +106,9 @@ export const AddUser = (props) => {
                 background: "#BCBCBB",
                 borderRadius: "15px",
               },
+            }}
+            onClick={() => {
+              dispatch(newUserModal(false));
             }}
             fontSize="medium"
           />
@@ -128,12 +137,13 @@ export const AddUser = (props) => {
             className="input_feild"
             label="ID"
             name="id"
-            value={input.id}
+            value={newId}
             required
-            type="number"
+            type="text"
             onChange={(e) => {
               handleChange(e);
             }}
+            s
           ></TextField>
           <TextField
             className="input_feild"

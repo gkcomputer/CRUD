@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import logo from "../../../assests/logo.jpg";
 import { Button, TextField } from "@mui/material";
 import DataGridTable from "../../datagrid/DataGridTable";
@@ -11,6 +11,7 @@ import {
 import { fetchApi, filteredData } from "../../store/actions/fetchApi.action";
 import TransitionsModal from "../AddUserModal/AddUserModal";
 import UpdateUserModal from "../../UpdateUser/UpdateUserModal";
+import LetterAvatars from "../../avatar/LetterAvatars";
 
 function SearchPage() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function SearchPage() {
 
   useEffect(() => {
     if (nameInput === "" && emailInput === "" && cardInput === "") {
-      dispatch(fetchApi(data));
+      dispatch(filteredData(data));
       return;
     }
   }, [nameInput, emailInput, cardInput]);
@@ -47,6 +48,7 @@ function SearchPage() {
   };
 
   return (
+    // <ThemeProvider theme={theme}>
     <div style={{ width: "100%", height: "100%" }}>
       <div
         style={{
@@ -56,13 +58,24 @@ function SearchPage() {
           gap: "10px",
         }}
       >
-        <div>
-          <img
-            src={logo}
-            alt="logo"
-            width={150}
-            style={{ borderRadius: "5px" }}
-          />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <img
+              src={logo}
+              alt="logo"
+              width={150}
+              style={{ borderRadius: "5px" }}
+            />
+          </div>
+          <div>
+            <LetterAvatars />
+          </div>
         </div>
         <div
           style={{
@@ -71,71 +84,49 @@ function SearchPage() {
             justifyContent: "space-between",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              gap: "30px",
+          <TextField
+            label="Full Name"
+            id="outlined-size-small"
+            size="small"
+            value={nameInput}
+            onChange={(e) => {
+              dispatch(nameSearch(e.target.value));
             }}
-          >
-            <TextField
-              label="Full Name"
-              id="outlined-size-small"
-              size="small"
-              value={nameInput}
-              onChange={(e) => {
-                dispatch(nameSearch(e.target.value));
-              }}
-              autoFocus
-            />
-            <TextField
-              label="Email"
-              id="outlined-size-small"
-              size="small"
-              value={emailInput}
-              onChange={(e) => {
-                dispatch(emailSearch(e.target.value));
-              }}
-            />
-            <TextField
-              label="Card"
-              id="outlined-size-small"
-              size="small"
-              value={cardInput}
-              onChange={(e) => {
-                dispatch(cardSearch(e.target.value));
-              }}
-            />
-            <Button variant="contained" onClick={handleSerachClick}>
-              Search
-            </Button>
-            <Button variant="contained" onClick={handleResetClick}>
-              Reset
-            </Button>
-
-            <TransitionsModal />
-
-            <UpdateUserModal />
-
-            <Button variant="contained">Export</Button>
-          </div>
-          {/* <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              gap: "30px",
-              // borderLeft: "1px solid #c7b9b9",
-              // paddingLeft: "10px",
+            autoFocus
+          />
+          <TextField
+            label="Email"
+            id="outlined-size-small"
+            size="small"
+            value={emailInput}
+            onChange={(e) => {
+              dispatch(emailSearch(e.target.value));
             }}
-          ></div> */}
+          />
+          <TextField
+            label="Card"
+            id="outlined-size-small"
+            size="small"
+            value={cardInput}
+            onChange={(e) => {
+              dispatch(cardSearch(e.target.value));
+            }}
+          />
+          <Button variant="contained" onClick={handleSerachClick}>
+            Search
+          </Button>
+          <Button variant="contained" onClick={handleResetClick}>
+            Reset
+          </Button>
+          <TransitionsModal />
+          <UpdateUserModal />
         </div>
         <div>
           <DataGridTable />
         </div>
       </div>
     </div>
+    /* </ThemeProvider> */
   );
 }
 

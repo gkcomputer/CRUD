@@ -1,21 +1,30 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import { Box, Checkbox, Stack, TablePagination } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteModal, delteUser } from "../../store/actions/fetchApi.action";
+import { ToastContainer } from "react-toastify";
 
 function UserDeleteModal() {
   const row = useSelector((state) => state.apiReducer.deleteUser);
   const modalopen = useSelector((state) => state.apiReducer.modalShow);
+  const modalStatus = useSelector((state) => state.apiReducer.deleteModal);
+  const dispatch = useDispatch();
+
+  useMemo(() => {
+    if (modalStatus) {
+      dispatch(deleteModal(true));
+    } else {
+      dispatch(deleteModal(false));
+    }
+  }, [modalStatus]);
+
   const handleClose = () => {
     dispatch(deleteModal(false));
   };
-  const dispatch = useDispatch();
-
-  // console.log("modalOpen", modalopen);
 
   const style = {
     position: "absolute",
@@ -87,7 +96,7 @@ function UserDeleteModal() {
             <Button
               variant="contained"
               onClick={() => {
-                dispatch(delteUser(row));
+                dispatch(delteUser(row.key));
                 // console.log("deleteRow", row.fullName);
               }}
             >
@@ -102,6 +111,7 @@ function UserDeleteModal() {
               Cancel
             </Button>
           </Box>
+          <ToastContainer />
         </Stack>
       </Modal>
     </Stack>

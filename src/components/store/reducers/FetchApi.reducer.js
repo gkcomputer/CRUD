@@ -1,10 +1,13 @@
 const initialState = {
   ApiData: [],
+  filterData: [],
   selectedRow: {},
   deleteUser: null,
-  modalShow: false,
   isLoading: true,
-  userAdded: false,
+  userModal: false,
+  deleteModal: false,
+  modalShow: false,
+  editModal: false,
 };
 
 export const FetchaApiReducer = (state = initialState, action) => {
@@ -19,6 +22,7 @@ export const FetchaApiReducer = (state = initialState, action) => {
       return {
         ...state,
         ApiData: action.payload,
+        filterData: action.payload,
         error: null,
       };
     case "FETCH_API_FAILURE":
@@ -30,19 +34,24 @@ export const FetchaApiReducer = (state = initialState, action) => {
     case "FILTEREDDATA":
       return {
         ...state,
-        ApiData: action.payload,
+        filterData: action.payload,
       };
     case "SELECTALL":
-      const updated = state.ApiData.map((el) => ({
+      const updated = state.filterData.map((el) => ({
         ...el,
         checked: action.payload,
       }));
-      return { ...state, ApiData: updated };
+      return { ...state, filterData: updated };
 
-    case "ADD_USER":
+    case "NEWUSER_MODAL":
       return {
         ...state,
-        userAdded: action.payload,
+        userModal: action.payload,
+      };
+    case "ADD_USER_MODAL":
+      return {
+        ...state,
+        userModal: action.payload,
       };
 
     case "DELETE_USER":
@@ -50,15 +59,30 @@ export const FetchaApiReducer = (state = initialState, action) => {
         ...state,
         deleteUser: action.payload,
       };
+    case "USER_DELETED_MODAL":
+      return {
+        ...state,
+        deleteModal: action.payload,
+      };
     case "MODAL":
       return {
         ...state,
         modalShow: action.payload,
       };
+    case "EDITMODAL":
+      return {
+        ...state,
+        editModal: action.payload,
+      };
+    case "EDITUSER_STATUS":
+      return {
+        ...state,
+        editModal: action.payload,
+      };
 
     case "SELECTED_ROW":
       const ID = action.payload.row;
-      const selectrow = state.ApiData.find(
+      const selectrow = state.filterData.find(
         (el) => el.id === action.payload.row
       );
       const checkedRow =
@@ -72,7 +96,7 @@ export const FetchaApiReducer = (state = initialState, action) => {
               checked: action.payload.check,
             };
 
-      const upDatedData = state.ApiData.map((el) => {
+      const upDatedData = state.filterData.map((el) => {
         if (ID === el.id) {
           return { ...el, ...checkedRow };
         } else {
@@ -82,7 +106,7 @@ export const FetchaApiReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedRow: checkedRow,
-        ApiData: upDatedData,
+        filterData: upDatedData,
       };
 
     default:

@@ -6,7 +6,8 @@ import Fade from "@mui/material/Fade";
 import { Button } from "@mui/material";
 import UpdateIcon from "@mui/icons-material/Update";
 import { UpdateUser } from "./UpdateUser";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { editModal } from "../store/actions/fetchApi.action";
 
 const style = {
   position: "absolute",
@@ -23,37 +24,40 @@ const style = {
 };
 
 export default function UpdateUserModal() {
-  const data = useSelector((state) => state.apiReducer.ApiData);
-  const [open, setOpen] = React.useState(false);
+  const data = useSelector((state) => state.apiReducer.filterData);
+  const editStatus = useSelector((state) => state.apiReducer.editModal);
+  const dispatch = useDispatch();
   const [rowSelect, setRowSelect] = React.useState();
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
-  const modalClose = () => {
-    setOpen(false);
-  };
+  console.log("editStatus", editStatus);
 
-  const close = () => {
-    setOpen(!open);
-  };
+  // React.useEffect(() => {
+  //   if (editStatus) {
+  //     setOpen(false);
+  //   } else {
+  //     setOpen(true);
+  //   }
+  // }, [editStatus]);
 
-  const filterData = data.filter((el) => {
+  const rowCheck = data.filter((el) => {
     return el.checked === true;
   });
 
   React.useEffect(() => {
-    if (filterData.length < 1 || filterData.length > 1) {
+    if (rowCheck.length < 1 || rowCheck.length > 1) {
       setRowSelect(false);
     } else {
       return setRowSelect(true);
     }
-  }, [filterData]);
+  }, [rowCheck]);
 
   return (
     <div>
       {rowSelect ? (
         <Button
-          onClick={handleOpen}
+          onClick={() => {
+            dispatch(editModal(true));
+          }}
           className="iconbtn"
           sx={{ borderRadius: "5px" }}
           variant="contained"
@@ -62,7 +66,6 @@ export default function UpdateUserModal() {
         </Button>
       ) : (
         <Button
-          onClick={handleOpen}
           className="iconbtn"
           sx={{ borderRadius: "5px" }}
           variant="contained"
@@ -75,8 +78,10 @@ export default function UpdateUserModal() {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={editStatus}
+        onClose={() => {
+          dispatch(editModal(false));
+        }}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -85,9 +90,9 @@ export default function UpdateUserModal() {
           },
         }}
       >
-        <Fade in={open}>
+        <Fade in={editStatus}>
           <Box sx={style}>
-            <UpdateUser close={close} modalclose={modalClose} />
+            <UpdateUser />
           </Box>
         </Fade>
       </Modal>
