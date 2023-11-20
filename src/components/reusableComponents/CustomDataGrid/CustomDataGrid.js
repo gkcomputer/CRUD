@@ -19,6 +19,7 @@ export default function CustomDataGrid() {
   return (
     <Box sx={{ height: "auto", width: "100%" }}>
       <DataGrid
+        sx={{ width: "100%" }}
         rows={data}
         columns={columns}
         // initialState={{

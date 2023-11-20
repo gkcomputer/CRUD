@@ -3,15 +3,17 @@ import { CrudPaper } from "../../reusableComponents";
 import Scrollbars from "react-custom-scrollbars";
 import CustomDataGrid from "../../reusableComponents/CustomDataGrid/CustomDataGrid";
 import { Checkbox, FormControlLabel } from "@mui/material";
-import Header from "../../header/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useReducer } from "react";
+import React from "react";
+import { fetchApi } from "../../store/actions/fetchApi.action";
 
 export default function AdminDashBoard() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.apiReducer.ApiData);
 
-  console.log("datajjjljljljljl", data);
+  React.useEffect(() => {
+    dispatch(fetchApi());
+  }, []);
+  const data = useSelector((state) => state.apiReducer.ApiData);
 
   const differentCards = data.reduce((acc, current) => {
     if (acc[current.card]) {
