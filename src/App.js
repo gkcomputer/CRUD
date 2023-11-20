@@ -1,11 +1,11 @@
 import React from "react";
-import SearchPage from "./components/pages/searchPage/SearchPage";
+import { RouterProvider } from "react-router-dom";
+import { routes } from "./routes";
 
 function App() {
   return (
     <div>
-      {/* <BodyContent /> */}
-      <SearchPage />
+      <RouterProvider router={routes}></RouterProvider>
     </div>
   );
 }

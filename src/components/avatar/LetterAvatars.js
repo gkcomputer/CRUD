@@ -2,9 +2,17 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 
-export default function LetterAvatars() {
+export default function EmployeeAvatars() {
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        gap: "10px",
+      }}
+    >
       <Stack sx={{ display: "flex" }}>
         <p style={{ margin: "0px" }}>ADMIN</p>
         <p style={{ margin: "0px" }}>Hello! GK</p>

@@ -63,25 +63,7 @@ function SearchPage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <img
-              src={logo}
-              alt="logo"
-              width={150}
-              style={{ borderRadius: "5px" }}
-            />
-          </div>
-          <div>
-            <LetterAvatars />
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            flexWrap: "wrap",
           }}
         >
           <TextField

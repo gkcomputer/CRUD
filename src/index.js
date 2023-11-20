@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./components/store/RootReducer";
+import { StyledThemeProvider } from "./providers/StyledThemeProvider";
 // import dotenv from "dotenv";
 
 // dotenv.config();
@@ -13,7 +14,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <StyledThemeProvider>
+        <App />
+      </StyledThemeProvider>
     </Provider>
   </React.StrictMode>
 );

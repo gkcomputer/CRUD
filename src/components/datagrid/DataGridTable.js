@@ -47,7 +47,7 @@ export default function BasicTable() {
   ];
 
   React.useEffect(() => {
-    dispatch(fetchApi(data));
+    dispatch(fetchApi());
   }, []);
 
   React.useEffect(() => {
@@ -124,7 +124,9 @@ export default function BasicTable() {
                       </TableCell>
                       <TableCell align="left">{row.email}</TableCell>
                       <TableCell align="left">{row.phone}</TableCell>
-                      <TableCell align="left">{row.card}</TableCell>
+                      <TableCell align="left">
+                        {row.card.toLocaleUpperCase()}
+                      </TableCell>
                       <TableCell align="left">{row.start_date}</TableCell>
                       <TableCell align="left">{row.expire_date}</TableCell>
                       <TableCell align="left">
