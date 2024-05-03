@@ -8,7 +8,11 @@ import Signup from "./components/pages/signup/Signup";
 export const routes = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />,
+    element: (
+      <RootLayout>
+        <SearchPage />
+      </RootLayout>
+    ),
     children: [
       { path: "/Login", element: <Login /> },
       { path: "/Signup", element: <Signup /> },
