@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import logo from "../../../assests/logo.jpg";
 import { Button, TextField } from "@mui/material";
 import DataGridTable from "../../datagrid/DataGridTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +10,6 @@ import {
 import { fetchApi, filteredData } from "../../store/actions/fetchApi.action";
 import TransitionsModal from "../AddUserModal/AddUserModal";
 import UpdateUserModal from "../../UpdateUser/UpdateUserModal";
-import LetterAvatars from "../../avatar/LetterAvatars";
 
 function SearchPage() {
   const dispatch = useDispatch();

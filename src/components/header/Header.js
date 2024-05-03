@@ -42,9 +42,9 @@ export default function Header() {
           />
         </div>
         <StyledLink to="/Search">Home</StyledLink>
-        <StyledLink to="/DashBoard">Dashboard</StyledLink>
+        {/* <StyledLink to="/DashBoard">Dashboard</StyledLink>
         <StyledLink to="/Login">Login</StyledLink>
-        <StyledLink to="/Login">Logout</StyledLink>
+        <StyledLink to="/Login">Logout</StyledLink> */}
         <StyledAvatar>
           <EmployeeAvatars />
         </StyledAvatar>

@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 
 const CrudTypography = styled(Typography)`
   ${({ theme, customColor }) => `
-    color:${theme.fontColor[customColor] || theme.fontColor.lightBlue}
+    color:${theme.fontColor[customColor] || theme.fontColor.blue}
     
 `}
 `;

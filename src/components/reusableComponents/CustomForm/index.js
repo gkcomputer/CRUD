@@ -1,5 +1,5 @@
-const CrudCustomForm = ({ children, submit }) => {
-  return <form onSubmit={submit}>{children}</form>;
+const CrudCustomForm = ({ children, onSubmit }) => {
+  return <form onSubmit={onSubmit}>{children}</form>;
 };
 
 export default CrudCustomForm;

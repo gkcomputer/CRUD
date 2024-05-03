@@ -12,7 +12,7 @@ import { Button } from "@mui/material";
 import "./Custom.Login.css";
 import { validation } from "./Validation";
 
-export const Login = () => {
+export const CrudLogin = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

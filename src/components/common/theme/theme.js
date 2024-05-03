@@ -16,6 +16,10 @@ const theme = createTheme({
   colors: {
     green: "#64DC54",
   },
+  fontColor: {
+    yellow: "#FFC300",
+    red: "#ff0000",
+  },
 });
 
 export default theme;

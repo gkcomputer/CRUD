@@ -3,13 +3,15 @@ import {
   CrudButton,
   CrudCustomForm,
   CrudInputFeild,
+  CrudPaper,
   CrudTypography,
 } from "../../reusableComponents";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const LoginContainer = styled.div`
-  width: 50%;
+  width: 100%;
   height: auto;
-  border: 1px solid red;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,22 +20,60 @@ const LoginContainer = styled.div`
 `;
 
 export default function Login() {
+  const [loginDetails, setLoginDetails] = useState({
+    username: "gk",
+    password: "test",
+  });
+
+  const handlechange = (event) => {
+    setLoginDetails({
+      ...loginDetails,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    console.log("loginDetails", loginDetails);
+  };
   return (
-    <div>
-      <CrudCustomForm>
-        <LoginContainer>
-          <CrudTypography customColor="red">Login</CrudTypography>
-          <CrudInputFeild placeholder="user name " />
-          <CrudInputFeild placeholder="password " />
-          <CrudButton
-            variant="contained"
-            style={{ width: "200px" }}
-            type="submit"
-          >
-            Submit
-          </CrudButton>
-        </LoginContainer>
+    <>
+      <CrudCustomForm onSubmit={formSubmit}>
+        <CrudPaper paperStyles={{ width: "500px" }}>
+          <LoginContainer>
+            <CrudTypography
+              fontFamily="sans-serif"
+              fontWeight={900}
+              fontSize="x-large"
+            >
+              Welcome
+            </CrudTypography>
+            <CrudTypography customColor="blue">
+              Please enter your Details
+            </CrudTypography>
+            <CrudInputFeild
+              placeholder="user name "
+              name="username"
+              onChange={handlechange}
+              value={loginDetails.username}
+              width="200px"
+            />
+            <CrudInputFeild
+              placeholder="password "
+              name="password"
+              onChange={handlechange}
+              value={loginDetails.password}
+            />
+            <CrudButton variant="contained" type="submit">
+              Login
+            </CrudButton>
+            <CrudTypography customColor="blue">Forgot password?</CrudTypography>
+            <CrudTypography customColor="blue">
+              Dont have account? <Link to="/Signup">Sign up</Link>
+            </CrudTypography>
+          </LoginContainer>
+        </CrudPaper>
       </CrudCustomForm>
-    </div>
+    </>
   );
 }

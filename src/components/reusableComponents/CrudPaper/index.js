@@ -13,6 +13,8 @@ export default function CrudPaper({
     <Box
       sx={{
         display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         flexWrap: "wrap",
         "& > :not(style)": {
           m: { margin },
